@@ -28,7 +28,12 @@ echo "${IP_CLIENT7_1}  client7-1.${DOMAIN} client7-1" >> /etc/hosts
 if [ ! -f /vagrant/secure.env ]; then
   echo "Generating new passwords for use with our setup..."
   echo DOMAIN=\"${DOMAIN}\" >> /vagrant/secure.env
-  echo REALM=$(echo ${DOMAIN} | tr [a-z] [A-Z])
+  echo REALM=\"$(echo ${DOMAIN} | tr [a-z] [A-Z])\" >> /vagrant/secure.env
+  echo IP_IDM_1=\""${IP_IDM_1}"\" >> /vagrant/secure.env
+  echo IP_IDM_2=\""${IP_IDM_2}"\" >> /vagrant/secure.env
+  echo IP_CLIENT7_1=\""${IP_CLIENT7_1}"\" >> /vagrant/secure.env
+  echo DNS_REVERSE_ZONE=\""${DNS_REVERSE_ZONE}"\" >> /vagrant/secure.env
+  echo DNS_FORWARDER=\""${DNS_FORWARDER}"\" >> /vagrant/secure.env
   echo DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo MASTER_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo ADMIN_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
