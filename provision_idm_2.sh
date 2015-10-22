@@ -55,9 +55,23 @@ ipa otptoken-add --desc="Soft Token for superman" --owner=superman --type=totp -
 ipa otptoken-add --desc="Soft Token for spiderman" --owner=spiderman --type=totp --algo=sha512 --digits=6
 ipa otptoken-add --desc="Soft Token for batman" --owner=batman --type=totp --algo=sha512 --digits=6
 
+# these users have an OTP
+ipa group-add-member admins --users=superman
+ipa group-add-member admins --users=spiderman
+ipa group-add-member admins --users=batman
+
 id superman
 id spiderman
 id batman
+
+# these users do not
+ipa group-add-member editors --users=daredevil
+ipa group-add-member editors --users=flash
+ipa group-add-member editors --users=wondergirl
+
+id daredevil
+id flash
+id wondergirl
 
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf

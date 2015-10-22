@@ -83,9 +83,23 @@ ipa otptoken-add --desc="Soft Token for aquagirl" --owner=aquagirl --type=totp -
 ipa otptoken-add --desc="Soft Token for armor" --owner=armor --type=totp --algo=sha512 --digits=6
 ipa otptoken-add --desc="Soft Token for beast" --owner=beast --type=totp --algo=sha512 --digits=6
 
+# these users have an OTP
+ipa group-add-member admins --users=aquagirl
+ipa group-add-member admins --users=armor
+ipa group-add-member admins --users=beast
+
 id aquagirl
 id armor
 id beast
+
+# these users do not
+ipa group-add-member editors --users=greenlantern
+ipa group-add-member editors --users=argent
+ipa group-add-member editors --users=atlas
+
+id greenlantern
+id argent
+id atlas
 
 # disable the allow all host based access control rule
 ipa hbacrule-disable allow_all
