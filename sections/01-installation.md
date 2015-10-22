@@ -1,25 +1,24 @@
 # Installation of Red Hat Identity Management
 
 ## Update Base Operating System
-{{{
+```
 yum -y upgrade
-}}}
+```
 
 ## Install Red Hat Identity Management on idm-1.example.test
 Install the necessary packages:
-{{{
+```
 yum -y install ipa-server bind bind-dyndb-ldap
-}}}
-
+```
 Generate (and properly record) some passwords:
-{{{
+```
   export DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
   export MASTER_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
   export ADMIN_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
-}}}
+```
 
 Now run the install (which utlizes the passwords above):
-{{{
+```
 ipa-server-install \
   --unattended \
   --ip-address=172.17.0.2 \
@@ -32,7 +31,7 @@ ipa-server-install \
   --setup-dns \
   --reverse-zone=0.17.172.in-addr.arpa. \
   --forwarder=8.8.8.8
-}}}
+```
 
 ## Explore the Web GUI
 Once completed, you should be able to browse to the Web GUI and browse around.  Doing
@@ -42,4 +41,5 @@ be redirected to the FQDN of the IDM server.
 https://idm-1.example.test or https://172.17.0.2
 
 Username: ```admin```
+
 Password: ```${ADMIN_PASSWORD}```
