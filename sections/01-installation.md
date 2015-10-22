@@ -34,8 +34,8 @@ ipa-server-install \
 ```
 
 ## Explore the Web GUI
-Once completed, you should be able to browse to the Web GUI and browse around.  Doing
-so will require proper DNS resolution or a properly configured ```/etc/hosts``` on the
+Once completed, you should go to the Web GUI and browse around.  Doing so will
+require proper DNS resolution or a properly configured ```/etc/hosts``` on the
 client as you will be redirected to the FQDN of the IDM server.
 
 [https://idm-1.example.test](https://idm-1.example.test) or [https://172.17.0.2](https://172.17.0.2)
