@@ -12,9 +12,9 @@ yum -y install ipa-server bind bind-dyndb-ldap
 ```
 Generate (and properly record) some passwords:
 ```
-  export DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
-  export MASTER_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
-  export ADMIN_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\"
+  export DM_PASSWORD="$(openssl rand -base64 16 | tr -dc [:alnum:])"
+  export MASTER_PASSWORD="$(openssl rand -base64 16 | tr -dc [:alnum:])"
+  export ADMIN_PASSWORD="$(openssl rand -base64 16 | tr -dc [:alnum:])"
 ```
 
 Now run the install (which utlizes the passwords above):
