@@ -120,22 +120,41 @@ ipa hbacrule-add-user allow_editors --groups=editors
 ipa hbacrule-add-host allow_editors --hostgroups=idm-clients
 ipa hbacrule-mod allow_editors --servicecat=all
 
+# create an nfs mount for home directories
+mkdir -p /home/ipahomes
+echo "/home/ipahomes gss/krb5p(rw,no_root_squash,subtree_check,fsid=0)" >> /etc/exports
+
+# enable and start nfs-server
+systemctl enable nfs-server.service
+systemctl start nfs-server.service
+
+# create our nfs service principals
+ipa service-add --force nfs/idm-1.${DOMAIN}@${REALM}
+ipa service-add --force nfs/idm-2.${DOMAIN}@${REALM}
+ipa service-add --force nfs/client7-1.${DOMAIN}@${REALM}
+ipa service-add --force nfs/client6-1.${DOMAIN}@${REALM}
+
+# create our automounts
+ipa automountkey-add default auto.master --key="/home" --info="auto.home"
+ipa automountmap-add default auto.home
+ipa automountkey-add default auto.home --key="*" --info="-sec=krb5p,rw,soft idm-1.${DOMAIN}:/home/ipahomes/&"
+
+# make sure our demo users' home dirs exist
+for x in $(ipa user-find | grep 'User login:' | awk '{ print $3; }'); do
+  cp -ra /etc/skel /home/ipahomes/$x
+  chown -R $x: /home/ipahomes/$x
+done
+
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
 echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
 echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
-# create an nfs mount for home directories
-mkdir -p /home/ipahomes
-echo "/home/ipahomes ${IP_CIDR}(rw)" >> /etc/exports
+# get the updated keytab that includes nfs principal
+ipa-getkeytab -s idm-1.${DOMAIN} \
+  -p host/idm-1.${DOMAIN}@${REALM} \
+  -p nfs/idm-1.${DOMAIN}@${REALM} \
+  -k /etc/krb5.keytab
 
-# enable and start nfs-server
-systemctl enable nfs-server.service
-systemctl start nfs-server.service
-
-# create our automounts
-ipa automountkey-add default auto.master --key="/home" --info="auto.home"
-ipa automountmap-add default auto.home
-ipa automountkey-add default auto.home --key="*" --info="rw,soft idm-1.${DOMAIN}:/home/ipahomes/&"
 exit 0

@@ -79,4 +79,10 @@ echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
 echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
+# get an updated keytab that includes nfs principal
+ipa-getkeytab -s idm-1.${DOMAIN} \
+  -p host/idm-2.${DOMAIN}@${REALM} \
+  -p nfs/idm-2.${DOMAIN}@${REALM} \
+  -k /etc/krb5.keytab
+
 exit 0

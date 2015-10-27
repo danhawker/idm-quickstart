@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "provision_client7_1.sh"
+echo "provision_client6_1.sh"
 source /vagrant/secure.env
 
 # Use our new IPA based dns server -- will prob be reset at reboot
@@ -24,8 +24,8 @@ echo ${ADMIN_PASSWORD} | kinit admin@${REALM}
 
 # get an updated keytab that includes nfs principal
 ipa-getkeytab -s idm-1.${DOMAIN} \
-  -p host/client7-1.${DOMAIN}@${REALM} \
-  -p nfs/client7-1.${DOMAIN}@${REALM} \
+  -p host/client6-1.${DOMAIN}@${REALM} \
+  -p nfs/client6-1.${DOMAIN}@${REALM} \
   -k /etc/krb5.keytab
 
 for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerberos-master._udp _ntp._udp; do

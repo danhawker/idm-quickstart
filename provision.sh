@@ -13,6 +13,7 @@ IP_CIDR="172.17.0.0/24"
 IP_IDM_1="172.17.0.2"
 IP_IDM_2="172.17.0.3"
 IP_CLIENT7_1="172.17.0.9"
+IP_CLIENT6_1="172.17.0.19"
 
 # set up some dns stuffs
 DNS_REVERSE_ZONE="0.17.172.in-addr.arpa."
@@ -24,6 +25,7 @@ echo "::1         localhost localhost.localdomain localhost6 localhost6.localdom
 echo "${IP_IDM_1}  idm-1.${DOMAIN} idm-1" >> /etc/hosts
 echo "${IP_IDM_2}  idm-2.${DOMAIN} idm-2" >> /etc/hosts
 echo "${IP_CLIENT7_1}  client7-1.${DOMAIN} client7-1" >> /etc/hosts
+echo "${IP_CLIENT6_1}  client6-1.${DOMAIN} client6-1" >> /etc/hosts
 
 # create a new set of passwords to be used for our installation
 if [ ! -f /vagrant/secure.env ]; then
@@ -34,6 +36,7 @@ if [ ! -f /vagrant/secure.env ]; then
   echo IP_IDM_1=\""${IP_IDM_1}"\" >> /vagrant/secure.env
   echo IP_IDM_2=\""${IP_IDM_2}"\" >> /vagrant/secure.env
   echo IP_CLIENT7_1=\""${IP_CLIENT7_1}"\" >> /vagrant/secure.env
+  echo IP_CLIENT6_1=\""${IP_CLIENT6_1}"\" >> /vagrant/secure.env
   echo DNS_REVERSE_ZONE=\""${DNS_REVERSE_ZONE}"\" >> /vagrant/secure.env
   echo DNS_FORWARDERS=\""${DNS_FORWARDERS}"\" >> /vagrant/secure.env
   echo DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
