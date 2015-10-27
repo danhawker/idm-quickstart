@@ -69,6 +69,8 @@ Once the VMs are up, you are able to login to each machine by running:
 ** ```vagrant ssh idm_2```
 * IDM Client
 ** ```vagrant ssh client7_1```
+* IDM Client
+** ```vagrant ssh client6_1```
 
 
 ### Login to the VMs
