@@ -9,6 +9,7 @@ yum -y upgrade
 DOMAIN=${DOMAIN:-example.test}
 
 # specify some IPs for our IPs
+IP_CIDR="172.17.0.0/24"
 IP_IDM_1="172.17.0.2"
 IP_IDM_2="172.17.0.3"
 IP_CLIENT7_1="172.17.0.9"
@@ -29,6 +30,7 @@ if [ ! -f /vagrant/secure.env ]; then
   echo "Generating new passwords for use with our setup..."
   echo DOMAIN=\"${DOMAIN}\" >> /vagrant/secure.env
   echo REALM=\"$(echo ${DOMAIN} | tr [a-z] [A-Z])\" >> /vagrant/secure.env
+  echo IP_CIDR=\"${IP_CIDR}\" >> /vagrant/secure.env
   echo IP_IDM_1=\""${IP_IDM_1}"\" >> /vagrant/secure.env
   echo IP_IDM_2=\""${IP_IDM_2}"\" >> /vagrant/secure.env
   echo IP_CLIENT7_1=\""${IP_CLIENT7_1}"\" >> /vagrant/secure.env

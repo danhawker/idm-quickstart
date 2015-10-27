@@ -121,4 +121,16 @@ echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
 echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
+# create an nfs mount for home directories
+mkdir -p /home/ipahomes
+echo "/home/ipahomes ${IP_CIDR}(rw)" >> /etc/exports
+
+# enable and start nfs-server
+systemctl enable nfs-server.service
+systemctl start nfs-server.service
+
+# create our automounts
+ipa automountkey-add default auto.master --key="/home" --info="auto.home"
+ipa automountmap-add default auto.home
+ipa automountkey-add default auto.home --key="*" --info="rw,soft idm-1.${DOMAIN}:/home/ipahomes/&"
 exit 0
