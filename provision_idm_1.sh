@@ -13,7 +13,7 @@ done
 ipa-server-install \
   --unattended \
   --ip-address=${IP_IDM_1} \
-  --realm ${REALM} \
+  --realm=${REALM} \
   --domain=${DOMAIN} \
   --ds-password="${DM_PASSWORD}" \
   --master-password="${MASTER_PASSWORD}" \
