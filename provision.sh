@@ -16,7 +16,7 @@ IP_CLIENT7_1="172.17.0.9"
 
 # set up some dns stuffs
 DNS_REVERSE_ZONE="0.17.172.in-addr.arpa."
-DNS_FORWARDER="8.8.8.8"
+DNS_FORWARDERS="8.8.8.8 8.8.4.4"
 
 # make sure all hosts can be found
 echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts
@@ -35,7 +35,7 @@ if [ ! -f /vagrant/secure.env ]; then
   echo IP_IDM_2=\""${IP_IDM_2}"\" >> /vagrant/secure.env
   echo IP_CLIENT7_1=\""${IP_CLIENT7_1}"\" >> /vagrant/secure.env
   echo DNS_REVERSE_ZONE=\""${DNS_REVERSE_ZONE}"\" >> /vagrant/secure.env
-  echo DNS_FORWARDER=\""${DNS_FORWARDER}"\" >> /vagrant/secure.env
+  echo DNS_FORWARDERS=\""${DNS_FORWARDERS}"\" >> /vagrant/secure.env
   echo DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo MASTER_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo ADMIN_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env

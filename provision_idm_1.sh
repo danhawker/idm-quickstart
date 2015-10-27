@@ -5,6 +5,11 @@ source /vagrant/secure.env
 
 yum -y install ipa-server bind bind-dyndb-ldap
 
+unset DNS_FORWARDER IPA_FORWARDERS
+for DNS_FORWARDER in ${DNS_FORWARDERS}; do
+  IPA_FORWARDERS="${IPA_FORWARDERS} --forwarder=${DNS_FORWARDER}"
+done
+
 ipa-server-install \
   --unattended \
   --ip-address=${IP_IDM_1} \
@@ -16,7 +21,7 @@ ipa-server-install \
   --mkhomedir \
   --setup-dns \
   --reverse-zone=${DNS_REVERSE_ZONE} \
-  --forwarder=${DNS_FORWARDER}
+  ${IPA_FORWARDERS}
 
 ipa-replica-prepare \
   idm-2.${DOMAIN} \
