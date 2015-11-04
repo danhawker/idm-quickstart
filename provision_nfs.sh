@@ -45,7 +45,7 @@ id riddler
 
 echo ${ADMIN_PASSWORD} | kinit admin@${REALM}
 
-# redhat 6.1 needs a service for nfs
+# redhat 6.1 needs a service for nfs-server
 ipa service-add --force nfs/nfs.${DOMAIN}@${REALM}
 
 # get the updated keytab that includes nfs principal

@@ -3,10 +3,10 @@
 <!-- MarkdownTOC depth=4 autolink=true bracket=round -->
 
 - [Introduction](#introduction)
-- [Table of Contents](#table-of-contents)
-  - [Basic Deployment](#basic-deployment)
-  - [Advanced Topics](#advanced-topics)
-- [Vagrant Demo](#vagrant-demo)
+- [Basic Deployment](#basic-deployment)
+- [Advanced Topics](#advanced-topics)
+- [Demonstration](#demonstration)
+  - [Vagrant Demo](#vagrant-demo)
   - [Notes](#notes)
   - [Start the VMs](#start-the-vms)
   - [Accessing the VMs](#accessing-the-vms)
@@ -22,10 +22,15 @@ such as downloading updates and other content._
 The purpose of this training is to quickly demonstrate Red Hat Identity Management
 IT architecture that provides an end-to-end solution for managing centralized users,
 groups, host based access controls, roles, password policies and escalated privileges
-quickly and reliably for applications and hosts alike.
+quickly and reliably.
 
-## Table of Contents
-### Basic Deployment
+Assuming you would like to perform all of the steps manually, you will first want
+to start with the [Basic Deployment](#basic-deployment) and then move on to the
+more [Advanced Topics](#advanced-topics).  Afterwards, you will have a suitable
+environment for
+
+## Basic Deployment
+
 * [Prerequisites](sections/00-prerequisites.md)
 * [Installation of Red Hat Identity Management](sections/01-installation.md)
 * [Managing Identity: Users, Hosts, and Groups](sections/02-managing-identity.md)
@@ -33,15 +38,17 @@ quickly and reliably for applications and hosts alike.
 * [Managing Policy](sections/04-managing-policy.md)
 * [Delegating IdM Privileges (RBAC)](sections/05-role-based-access)
 
-### Advanced Topics
-* Adding additional IdM Servers (replicas, topology)
-* Backup and Restore
-* Active Directory Integration (Trust, External Groups, Views)
-* Advanced User Features (SSH, OTP, Views)
-* Advanced Host Features (SSH, SSL)
-* Managing Network Services (Automount, DNS)
+## Advanced Topics
+* [Adding additional IdM Servers (replicas, topology)](sections/06-install-replica.md)
+* [Backup and Restore](sections/07-backup-and-restore.md)
+* [Active Directory Integration (Trust, External Groups, Views)](08-active-directory-integration.md)
+* [Advanced User Features (SSH, OTP, Views)](09-advanced-user-features.md)
+* [Advanced Host Features (SSH, SSL)](10-advanced-host-features.md)
+* [Managing Network Services (Automount, DNS)](11-managing-network-services.md)
 
-## Vagrant Demo
+## Demonstration
+
+### Vagrant Demo
 For your convenience, there is a simple Vagrantfile that will stand up the
 quick start environment using CentOS 7 and FreeIPA.  It will be stood up with
 a decent number of users and groups, mostly super heroes and super villians.

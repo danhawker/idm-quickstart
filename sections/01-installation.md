@@ -1,12 +1,37 @@
 # Installation of Red Hat Identity Management
 
-## Update Base Operating System
-Update the OS
+<!-- MarkdownTOC depth=4 autolink=true bracket=round -->
+
+- [Install Base Operating Systems](#install-base-operating-systems)
+- [Install Red Hat Identity Management Server Software](#install-red-hat-identity-management-server-software)
+- [Configure Red Hat Identity Management Servers](#configure-red-hat-identity-management-servers)
+- [Verification](#verification)
+  - [Explore the Web GUI](#explore-the-web-gui)
+- [Initial Configuration](#initial-configuration)
+
+<!-- /MarkdownTOC -->
+
+# Install Base Operating Systems
+Let's go ahead and install our Base OSes for all our systems.  This will speed
+things up later on because we will assume that all systems are installed, just
+not configured.
+
+* idm-1.example.test - RHEL 7
+* idm-2.example.test - RHEL 7
+* client7-1.example.test - RHEL 7
+* client6-1.example.test - RHEL 7
+
+For all of our systems, let's make sure they are fully updated:
 ```
 yum -y upgrade
 ```
 
-## Install Red Hat Identity Management on idm-1.example.test
+# Install Red Hat Identity Management Server Software
+We need to install the IDM software on the following systems:
+
+* idm-1.example.test
+* idm-2.example.test
+
 Install the necessary packages:
 ```
 yum -y install ipa-server bind bind-dyndb-ldap
@@ -26,6 +51,7 @@ echo MASTER_PASSWORD=\"${MASTER_PASSWORD}\" >> secure.env
 echo ADMIN_PASSWORD=\"${ADMIN_PASSWORD}\" >> secure.env
 ```
 
+# Configure Red Hat Identity Management Servers
 Now run the install (which utlizes the passwords above):
 ```
 ipa-server-install \
@@ -39,7 +65,7 @@ ipa-server-install \
   --mkhomedir \
   --setup-dns \
   --reverse-zone=0.17.172.in-addr.arpa. \
-  --forwarder=8.8.8.8
+  --forwarder=8.8.8.8 --forwarder=8.8.4.4
 ```
 
 You may need to adjust firewall settings to allow inbound traffic.

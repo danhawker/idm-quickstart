@@ -3,6 +3,7 @@
 echo "provision_idm_1.sh"
 source /vagrant/secure.env
 
+# install ipa server and dns server
 yum -y install ipa-server bind bind-dyndb-ldap
 
 unset DNS_FORWARDER IPA_FORWARDERS
@@ -23,6 +24,7 @@ ipa-server-install \
   --reverse-zone=${DNS_REVERSE_ZONE} \
   ${IPA_FORWARDERS}
 
+# prepare our replica
 ipa-replica-prepare \
   idm-2.${DOMAIN} \
   --no-wait-for-dns \
@@ -30,8 +32,10 @@ ipa-replica-prepare \
   --reverse-zone=${DNS_REVERSE_ZONE} \
   --ip-address=${IP_IDM_2}
 
+# copy the replicate info to the parent so we can install it in idm-2
 cp /var/lib/ipa/replica-info-idm-2.${DOMAIN}.gpg /vagrant
 
+# sanity check dns
 for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerberos-master._udp _ntp._udp; do
   echo ""
   dig @${IP_IDM_1} ${i}.${DOMAIN} srv +nocmd +noquestion +nocomments +nostats +noaa +noadditional +noauthority
@@ -41,12 +45,13 @@ echo ${ADMIN_PASSWORD} | kinit admin@${REALM}
 
 # add this server to the idm dns record
 ipa dnsrecord-add ${DOMAIN} idm --a-ip-address=${IP_IDM_1}
+ipa dnsrecord-add ${DOMAIN} ipa --a-ip-address=${IP_IDM_1}
 
 # sync ptr records on dns updates (does not do gui/cli add, removes or updates)
 ipa dnsconfig-mod --allow-sync-ptr=true
 
 # create our hostgroups and automember rules for idm servers
-ipa hostgroup-add idm-servers --desc="Hosts tht are IDM servers"
+ipa hostgroup-add idm-servers --desc="Hosts that are IDM servers"
 ipa automember-add idm-servers --type=hostgroup --desc="Match systems that are IDM servers"
 ipa automember-add-condition idm-servers --type=hostgroup --inclusive-regex='^idm-*' --key=cn --desc="Match IDM servers based on hostname"
 ipa automember-rebuild --type=hostgroup --hosts=idm-1.${DOMAIN}
@@ -61,6 +66,7 @@ ipa automember-add-condition idm-clients --type=hostgroup --exclusive-regex='^id
 ipa hostgroup-add-member --hosts=idm-1.${DOMAIN} idm-servers
 
 # set some sane defaults
+ipa config-mod --homedirectory=/export/home
 ipa config-mod --defaultshell=/bin/bash
 ipa config-mod --ipaselinuxusermapdefault=guest_u:s0
 ipa config-mod --user-auth-type=password --user-auth-type=otp
@@ -82,29 +88,59 @@ ipa user-add --random --first="Bruce" --last="Wayne" "batman" >> /vagrant/users.
 ipa user-add --random --first="Kathy" --last="Kane" "batwoman" >> /vagrant/users.txt
 ipa user-add --random --first="Hank" --last="McCoy" "beast" >> /vagrant/users.txt
 ipa user-add --random --first="Steve" --last="Rogers" "captainamerica" >> /vagrant/users.txt
+ipa user-add --random --first="Brian" --last="Braddock" "captainbritain" >> /vagrant/users.txt
+ipa user-add --random --first="Piotr" --last="Nikolaievitch Rasputin" "colossus" >> /vagrant/users.txt
+ipa user-add --random --first="Jack" --last="Ryder" "creeper" >> /vagrant/users.txt
+ipa user-add --random --first="Matt" --last="Murdock" "daredevil" >> /vagrant/users.txt
+ipa user-add --random --first="Scott" --last="Summers" "cyclops" >> /vagrant/users.txt
+ipa user-add --random --first="Floyd" --last="Lawton" "deadshot" >> /vagrant/users.txt
+ipa user-add --random --first="Oliver" --last="Queen" "greenarrow" >> /vagrant/users.txt
+ipa user-add --random --first="Andrea" --last="Thomas" "isis" >> /vagrant/users.txt
+ipa user-add --random --first="Reed" --last="Richards" "mrfantastic" >> /vagrant/users.txt
+ipa user-add --random --first="Kurt" --last="Wagner" "nightcrawler" >> /vagrant/users.txt
+ipa user-add --random --first="Edward" --last="Nygma" "riddler" >> /vagrant/users.txt
+ipa user-add --random --first="Anna" --last="Marie" "rogue" >> /vagrant/users.txt
+ipa user-add --random --first="Barry" --last="Allen" "flash" >> /vagrant/users.txt
+ipa user-add --random --first="Harvey" --last="Dent" "twoface" >> /vagrant/users.txt
+ipa user-add --random --first="Donna" --last="Troy" "wondergirl" >> /vagrant/users.txt
 
 # Generate some OTP tokens for a few users
 ipa otptoken-add --desc="Soft Token for aquagirl" --owner=aquagirl --type=totp --algo=sha512 --digits=6
 ipa otptoken-add --desc="Soft Token for armor" --owner=armor --type=totp --algo=sha512 --digits=6
+ipa otptoken-add --desc="Soft Token for batman" --owner=batman --type=totp --algo=sha512 --digits=6
 ipa otptoken-add --desc="Soft Token for beast" --owner=beast --type=totp --algo=sha512 --digits=6
+ipa otptoken-add --desc="Soft Token for spiderman" --owner=spiderman --type=totp --algo=sha512 --digits=6
+ipa otptoken-add --desc="Soft Token for superman" --owner=superman --type=totp --algo=sha512 --digits=6
 
 # these users have an OTP
 ipa group-add-member admins --users=aquagirl
 ipa group-add-member admins --users=armor
+ipa group-add-member admins --users=batman
 ipa group-add-member admins --users=beast
+ipa group-add-member admins --users=spiderman
+ipa group-add-member admins --users=superman
 
 id aquagirl
 id armor
+id batman
 id beast
+id spiderman
+id superman
 
 # these users do not
-ipa group-add-member editors --users=greenlantern
 ipa group-add-member editors --users=argent
 ipa group-add-member editors --users=atlas
+ipa group-add-member editors --users=daredevil
+ipa group-add-member editors --users=flash
+ipa group-add-member editors --users=greenlantern
+ipa group-add-member editors --users=wondergirl
 
-id greenlantern
 id argent
 id atlas
+id daredevil
+id flash
+id greenlantern
+id wondergirl
 
 # disable the allow all host based access control rule
 ipa hbacrule-disable allow_all
@@ -120,30 +156,21 @@ ipa hbacrule-add-user allow_editors --groups=editors
 ipa hbacrule-add-host allow_editors --hostgroups=idm-clients
 ipa hbacrule-mod allow_editors --servicecat=all
 
-# create an nfs mount for home directories
-mkdir -p /home/ipahomes
-echo "/home/ipahomes gss/krb5p(rw,no_root_squash,subtree_check,fsid=0)" >> /etc/exports
-
-# enable and start nfs-server
-systemctl enable nfs-server.service
-systemctl start nfs-server.service
-
-# create our nfs service principals
-ipa service-add --force nfs/idm-1.${DOMAIN}@${REALM}
-ipa service-add --force nfs/idm-2.${DOMAIN}@${REALM}
-ipa service-add --force nfs/client7-1.${DOMAIN}@${REALM}
-ipa service-add --force nfs/client6-1.${DOMAIN}@${REALM}
-
 # create our automounts
-ipa automountkey-add default auto.master --key="/home" --info="auto.home"
 ipa automountmap-add default auto.home
-ipa automountkey-add default auto.home --key="*" --info="-sec=krb5p,rw,soft idm-1.${DOMAIN}:/home/ipahomes/&"
+ipa automountkey-add default auto.home --key="*" --info="-sec=krb5p,rw,soft nfs.${DOMAIN}:/export/home/&"
+ipa automountkey-add default auto.master --key="/export/home" --info="auto.home"
 
-# make sure our demo users' home dirs exist
-for x in $(ipa user-find | grep 'User login:' | awk '{ print $3; }'); do
-  cp -ra /etc/skel /home/ipahomes/$x
-  chown -R $x: /home/ipahomes/$x
-done
+# configure our automounts
+ipa-client-automount --unattended
+
+# configure nfs to start at boot
+systemctl enable nfs.service
+systemctl enable nfs-secure.service
+
+# start nfs services
+systemctl start nfs.service
+systemctl start nfs-secure.service
 
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
@@ -151,10 +178,15 @@ echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
 echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
-# get the updated keytab that includes nfs principal
-ipa-getkeytab -s idm-1.${DOMAIN} \
-  -p host/idm-1.${DOMAIN}@${REALM} \
-  -p nfs/idm-1.${DOMAIN}@${REALM} \
-  -k /etc/krb5.keytab
+# setup our network so it works over reboots
+nmcli conn modify enp0s3 ipv4.ignore-auto-dns yes
+nmcli conn modify enp0s3 ipv4.dns "${IP_IDM_1} ${IP_IDM_2}"
+nmcli conn modify enp0s3 ipv4.dns-search "${DOMAIN}"
+nmcli conn show enp0s3
+
+# clean up our /etc/hosts
+echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts
+echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
+echo "${IP_IDM_1}  idm-1.${DOMAIN} idm-1" >> /etc/hosts
 
 exit 0

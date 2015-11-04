@@ -1,5 +1,15 @@
 # Prerequisites
 
+<!-- MarkdownTOC depth=4 autolink=true bracket=round -->
+
+- [Lab Overview](#lab-overview)
+- [Lab Environment](#lab-environment)
+  - [Notes](#notes)
+- [Lab Systems](#lab-systems)
+- [Lab Client](#lab-client)
+
+<!-- /MarkdownTOC -->
+
 ## Lab Overview
 We're going to be building 3 systems: one master, one replica and one client.
 These directions will produce the following systems:
@@ -14,22 +24,23 @@ These directions will produce the following systems:
 ![Infrastructure Overview](infrastructure-diagram.png "Infrastructure Overview")
 
 ## Lab Environment
-You need to have a working Vagrant environment.  This usually involves downloading
-and installing vagrant from [vagrantup.com](http://vangrantup.com).
-
-You'll also need a supported hypervisor, such as KVM / libvirt or VirtualBox.
+You need to have a working virtualization environment.  This usually involves
+downloading and installing a supported hypervisor, such as KVM / libvirt or
+VirtualBox.
 
 * A dedicated DNS name space ( this Quickstart will use "example.test" )
 * A /28 (or larger) subnet ( this Quickstart will use "172.17.0.0/28" )
-* Three physical or virtual servers:
-	* Red Hat Enterprise Linux 7 (RHEL7)
+* Four physical or virtual servers:
+	* three - Red Hat Enterprise Linux 7 (RHEL7)
+  * one - Red Hat Enterprise Linux 6 (RHEL6)
 	* "Minimal Install"
 	* 10 GB storage
 	* 1 GB RAM
 	* 1 CPU (or vCPU)
 
 ### Notes
-* DNS name space can be delegated as a DNS zone (though delegation is unnecessary without access from outside the lab environment)
+* DNS name space can be delegated as a DNS zone (though delegation is unnecessary
+without access from outside the lab environment)
 
 ## Lab Systems
 * 172.17.0.2 : idm-1.example.test

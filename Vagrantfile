@@ -87,20 +87,20 @@ Vagrant.configure(2) do |config|
     idm_1.vm.network "forwarded_port", guest: 443, host: 8443
   end
 
-  config.vm.define "idm_2" do |idm_2|
+  config.vm.define "nfs" do |nfs|
     # The hostname the machine should have. Defaults to nil. If nil, Vagrant
     # won't manage the hostname. If set to a string, the hostname will be set
     # on boot.
-    idm_2.vm.hostname = "idm-2.example.test"
+    nfs.vm.hostname = "nfs.example.test"
 
     # Create a private network, which allows host-only access to the machine
     # using a specific IP.
-    idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
+    nfs.vm.network "private_network", ip: "172.17.0.4", virtualbox__intnet: true
 
     # Enable provisioning with a shell script. Additional provisioners such as
     # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
-    idm_2.vm.provision "shell", path: "provision_idm_2.sh"
+    nfs.vm.provision "shell", path: "provision_nfs.sh"
   end
 
   config.vm.define "client7_1" do |client7_1|
@@ -137,6 +137,22 @@ Vagrant.configure(2) do |config|
     # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
     client6_1.vm.provision "shell", path: "provision_client6_1.sh"
+  end
+
+  config.vm.define "idm_2" do |idm_2|
+    # The hostname the machine should have. Defaults to nil. If nil, Vagrant
+    # won't manage the hostname. If set to a string, the hostname will be set
+    # on boot.
+    idm_2.vm.hostname = "idm-2.example.test"
+
+    # Create a private network, which allows host-only access to the machine
+    # using a specific IP.
+    idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
+
+    # Enable provisioning with a shell script. Additional provisioners such as
+    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+    # documentation for more information about their specific syntax and use.
+    idm_2.vm.provision "shell", path: "provision_idm_2.sh"
   end
 
 end

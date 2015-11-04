@@ -1,6 +1,24 @@
 # Managing Identity: Users, Hosts, and Groups
+
+<!-- MarkdownTOC depth=4 autolink=true bracket=round -->
+
+- [Create Users from the Command Line](#create-users-from-the-command-line)
+- [```](#)
+- [Create Users from the Web GUI](#create-users-from-the-web-gui)
+- [Create User Groups from the CLI](#create-user-groups-from-the-cli)
+- [Create User Groups from the Web GUI](#create-user-groups-from-the-web-gui)
+- [Create Hosts from the Command Line](#create-hosts-from-the-command-line)
+- [Create Hosts from the Web GUI](#create-hosts-from-the-web-gui)
+- [Create Host Groups from the Command Line](#create-host-groups-from-the-command-line)
+- [Create Host Groups from the Web GUI](#create-host-groups-from-the-web-gui)
+- [Create Automember Groups from the Command Line](#create-automember-groups-from-the-command-line)
+- [Create Automember Groups from the Web GUI](#create-automember-groups-from-the-web-gui)
+
+<!-- /MarkdownTOC -->
+
 ## Create Users from the Command Line
-Let's create a bunch of users with randomly generated passwords!
+
+Create a bunch of users with randomly generated passwords!
 
 ```
 ipa user-add --random --first="Clark" --last="Kent" "superman"
