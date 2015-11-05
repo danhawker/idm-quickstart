@@ -140,6 +140,7 @@ IFS=$'\n'
 COUNT=0
 for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   unset FU_USERNAME FU_PASSWORD FU_TITLE FU_FIRSTNAME FU_LASTNAME FU_TELEPHONE FU_ADDRESS_STREET FU_ADDRESS_CITY FU_ADDRESS_STATE FU_ADDRESS_ZIPCODE FU_EMPLOYEE_NUMBER
+  FAKE_USER_LINE=$(echo ${FAKE_USER_LINE} | sed -e 's/\"//g')
 
   #Username,Password,Title,GivenName,Surname,TelephoneNumber,StreetAddress,City,State,ZipCode,EmployeeNumber
   FU_USERNAME=$(echo ${FAKE_USER_LINE} | cut -d , -f 1 | tr [A-Z] [a-z])
