@@ -139,20 +139,21 @@ Vagrant.configure(2) do |config|
     client6_1.vm.provision "shell", path: "provision_client6_1.sh"
   end
 
-  config.vm.define "idm_2" do |idm_2|
-    # The hostname the machine should have. Defaults to nil. If nil, Vagrant
-    # won't manage the hostname. If set to a string, the hostname will be set
-    # on boot.
-    idm_2.vm.hostname = "idm-2.example.test"
+  # by default, don't create a replica
+  # config.vm.define "idm_2" do |idm_2|
+  #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
+  #   # won't manage the hostname. If set to a string, the hostname will be set
+  #   # on boot.
+  #   idm_2.vm.hostname = "idm-2.example.test"
 
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
+  #   # Create a private network, which allows host-only access to the machine
+  #   # using a specific IP.
+  #   idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
 
-    # Enable provisioning with a shell script. Additional provisioners such as
-    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-    # documentation for more information about their specific syntax and use.
-    idm_2.vm.provision "shell", path: "provision_idm_2.sh"
-  end
+  #   # Enable provisioning with a shell script. Additional provisioners such as
+  #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  #   # documentation for more information about their specific syntax and use.
+  #   idm_2.vm.provision "shell", path: "provision_idm_2.sh"
+  # end
 
 end
