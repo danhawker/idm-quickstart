@@ -55,6 +55,6 @@ fi
 mkdir -p /export/home
 
 # make sure we always include our secure environment variables for ease of use
-echo "source /vagrant/secure.env" > /etc/profile.d/vagrant.sh
+echo "[ -f /vagrant/secure.env ] && source /vagrant/secure.env" > /etc/profile.d/vagrant.sh
 
 exit 0

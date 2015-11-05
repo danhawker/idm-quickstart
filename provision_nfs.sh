@@ -57,17 +57,9 @@ ipa-getkeytab -s idm-1.${DOMAIN} \
 # create an nfs mount for home directories
 echo "/export *(rw,subtree_check,fsid=0,sec=krb5:krb5i:krb5p)" >> /etc/exports
 
-# enable and start nfs-server
-systemctl enable nfs-secure-server.service
-systemctl enable nfs-secure.service
+# enable and start nfs server
 systemctl enable nfs-server.service
-systemctl enable nfs.service
-
-# start nfs services
-systemctl start nfs.service
-systemctl start nfs-secure.service
 systemctl start nfs-server.service
-systemctl start nfs-secure-server.service
 
 # make sure our demo users' home dirs exist
 for x in $(ipa user-find | grep 'User login:' | awk '{ print $3; }'); do

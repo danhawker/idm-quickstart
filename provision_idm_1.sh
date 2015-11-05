@@ -24,17 +24,6 @@ ipa-server-install \
   --reverse-zone=${DNS_REVERSE_ZONE} \
   ${IPA_FORWARDERS}
 
-# prepare our replica
-ipa-replica-prepare \
-  idm-2.${DOMAIN} \
-  --no-wait-for-dns \
-  --password=${DM_PASSWORD} \
-  --reverse-zone=${DNS_REVERSE_ZONE} \
-  --ip-address=${IP_IDM_2}
-
-# copy the replicate info to the parent so we can install it in idm-2
-cp /var/lib/ipa/replica-info-idm-2.${DOMAIN}.gpg /vagrant
-
 # sanity check dns
 for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerberos-master._udp _ntp._udp; do
   echo ""
@@ -165,12 +154,10 @@ ipa automountkey-add default auto.master --key="/export/home" --info="auto.home"
 ipa-client-automount --unattended
 
 # configure nfs to start at boot
-systemctl enable nfs.service
-systemctl enable nfs-secure.service
+systemctl enable nfs-client.target
 
 # start nfs services
-systemctl start nfs.service
-systemctl start nfs-secure.service
+systemctl start nfs-client.target
 
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
@@ -188,5 +175,16 @@ nmcli conn show enp0s3
 echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts
 echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
 echo "${IP_IDM_1}  idm-1.${DOMAIN} idm-1" >> /etc/hosts
+
+# prepare our replica
+ipa-replica-prepare \
+  idm-2.${DOMAIN} \
+  --no-wait-for-dns \
+  --password=${DM_PASSWORD} \
+  --reverse-zone=${DNS_REVERSE_ZONE} \
+  --ip-address=${IP_IDM_2}
+
+# copy the replicate info to the parent so we can install it in idm-2
+cp /var/lib/ipa/replica-info-idm-2.${DOMAIN}.gpg /vagrant
 
 exit 0

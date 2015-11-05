@@ -46,12 +46,10 @@ ipa dnsrecord-add ${DOMAIN} ipa --a-ip-address=${IP_IDM_2}
 ipa automember-rebuild --type=hostgroup --hosts=idm-2.${DOMAIN}
 
 # configure nfs to start at boot
-systemctl enable nfs.service
-systemctl enable nfs-secure.service
+systemctl enable nfs-client.target
 
 # start nfs services
-systemctl start nfs.service
-systemctl start nfs-secure.service
+systemctl start nfs-client.target
 
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
