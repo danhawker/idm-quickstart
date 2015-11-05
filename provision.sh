@@ -24,7 +24,7 @@ DNS_REVERSE_ZONE="0.17.172.in-addr.arpa."
 DNS_FORWARDERS="8.8.8.8 8.8.4.4"
 
 # set a max of fake users (up to 50000)
-MAX_FAKE_USERS=1000
+MAX_FAKE_USERS=100
 
 # make sure all hosts can be found
 echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts
