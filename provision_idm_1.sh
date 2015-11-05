@@ -60,6 +60,9 @@ ipa config-mod --defaultshell=/bin/bash
 ipa config-mod --ipaselinuxusermapdefault=guest_u:s0
 ipa config-mod --user-auth-type=password --user-auth-type=otp
 
+# make ipausers a posix group so accounts just work
+ipa group-mod --posix ipausers
+
 # add some users
 echo "adding some users, refer to users.txt for information"
 ipa user-add --random --first="Clark" --last="Kent" "superman" > /vagrant/users.txt
@@ -130,6 +133,44 @@ id daredevil
 id flash
 id greenlantern
 id wondergirl
+
+# let's get CRAY CRAY and create 50,000 users from our fake users file...
+O_IFS=${IFS}
+IFS=$'\n'
+COUNT=0
+for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
+  unset FU_USERNAME FU_PASSWORD FU_TITLE FU_FIRSTNAME FU_LASTNAME FU_TELEPHONE FU_ADDRESS_STREET FU_ADDRESS_CITY FU_ADDRESS_STATE FU_ADDRESS_ZIPCODE FU_EMPLOYEE_NUMBER
+
+  #Username,Password,Title,GivenName,Surname,TelephoneNumber,StreetAddress,City,State,ZipCode,EmployeeNumber
+  FU_USERNAME=$(echo ${FAKE_USER_LINE} | cut -d , -f 1 | tr [A-Z] [a-z])
+  FU_PASSWORD=$(echo ${FAKE_USER_LINE} | cut -d , -f 2)
+  FU_TITLE=$(echo ${FAKE_USER_LINE} | cut -d , -f 3)
+  FU_FIRSTNAME=$(echo ${FAKE_USER_LINE} | cut -d , -f 4)
+  FU_LASTNAME=$(echo ${FAKE_USER_LINE} | cut -d , -f 5)
+  FU_TELEPHONE=$(echo ${FAKE_USER_LINE} | cut -d , -f 6)
+  FU_ADDRESS_STREET=$(echo ${FAKE_USER_LINE} | cut -d , -f 7)
+  FU_ADDRESS_CITY=$(echo ${FAKE_USER_LINE} | cut -d , -f 8)
+  FU_ADDRESS_STATE=$(echo ${FAKE_USER_LINE} | cut -d , -f 9)
+  FU_ADDRESS_ZIPCODE=$(echo ${FAKE_USER_LINE} | cut -d , -f 10)
+  FU_EMPLOYEE_NUMBER=$(echo ${FAKE_USER_LINE} | cut -d , -f 11)
+  # Skip the first line
+  if [[ ! $COUNT -eq 0 ]]; then
+    ipa user-add \
+      --title="${FU_TITLE}" \
+      --first="${FU_FIRSTNAME}" \
+      --last="${FU_LASTNAME}" \
+      --employeenumber="${FU_EMPLOYEE_NUMBER}" \
+      --phone="${FU_TELEPHONE}" \
+      --street="${FU_ADDRESS_STREET}" \
+      --city="${FU_ADDRESS_CITY}" \
+      --state="${FU_ADDRESS_STATE}" \
+      --postalcode="${FU_ADDRESS_ZIPCODE}" \
+      "${FU_USERNAME}"
+    echo "${FU_PASSWORD}\n${FU_PASSWORD}" | ipa passwd "${FU_USERNAME}"
+  fi
+  COUNT=1
+done
+IFS=${O_IFS}
 
 # disable the allow all host based access control rule
 ipa hbacrule-disable allow_all
