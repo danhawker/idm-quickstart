@@ -23,7 +23,6 @@ ipa-replica-install \
   --setup-dns \
   --password="${DM_PASSWORD}" \
   --admin-password="${ADMIN_PASSWORD}" \
-  --mkhomedir \
   --reverse-zone=${DNS_REVERSE_ZONE} \
   ${IPA_FORWARDERS} \
   /var/lib/ipa/replica-info-idm-2.${DOMAIN}.gpg
