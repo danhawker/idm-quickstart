@@ -191,15 +191,21 @@ IFS=${O_IFS}
 ipa hbacrule-disable allow_all
 
 # create a new allow admins host based access control rule
-ipa hbacrule-add allow_admins --desc="Allow admins access to all systems"
+ipa hbacrule-add allow_admins --desc="Allow admins access to all services on all systems"
 ipa hbacrule-add-user allow_admins --groups=admins
 ipa hbacrule-mod allow_admins --hostcat=all --servicecat=all
 
 # create a new allow editors host based access control rule
-ipa hbacrule-add allow_editors --desc="Allow editors access to all client systems"
+ipa hbacrule-add allow_editors --desc="Allow editors access to all services on all systems"
 ipa hbacrule-add-user allow_editors --groups=editors
-ipa hbacrule-add-host allow_editors --hostgroups=idm-clients
-ipa hbacrule-mod allow_editors --servicecat=all
+ipa hbacrule-mod allow_editors --hostcat=all --servicecat=all
+
+# create a new allow ipausers host based access control rule
+ipa hbacrule-add allow_ipausers --desc="Allow ipausers access to ssh on all client systems"
+ipa hbacrule-add-user allow_ipausers --groups=ipausers
+ipa hbacrule-add-host allow_ipausers --hostgroups=idm-clients
+ipa hbacrule-add-service allow_ipausers --hbacsvcs=sshd
+ipa hbacrule-mod allow_ipausers --hostcat=all
 
 # create our automounts
 ipa automountmap-add default auto.home
