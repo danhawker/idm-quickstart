@@ -2,11 +2,23 @@
 
 echo "provision.sh"
 
+NETWORK_DEVICE="enp0s3"
+
+# channel clean up for Red Hat Enterprise Linux
+cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&1 && {
+  subscription-manager repos --disable='*'
+  subscription-manager repos --enable='rhel-7-server-rpms'
+  NETWORK_DEVICE="eth0"
+}
+
+# clean up yum
+yum -y clean all
+
 # Do an upgrade of packages
 yum -y upgrade
 
 # make sure we have the nfs-utils
-yum -y install nfs-utils
+yum -y install nfs-utils NetworkManager
 
 # use a default of example.test if not specified
 DOMAIN=${DOMAIN:-example.test}
@@ -40,6 +52,7 @@ if [ ! -f /vagrant/secure.env ]; then
   echo "Generating new passwords for use with our setup..."
   echo DOMAIN=\"${DOMAIN}\" >> /vagrant/secure.env
   echo REALM=\"$(echo ${DOMAIN} | tr [a-z] [A-Z])\" >> /vagrant/secure.env
+  echo NETWORK_DEVICE=\"${NETWORK_DEVICE}\" >> /vagrant/secure.env
   echo IP_CIDR=\"${IP_CIDR}\" >> /vagrant/secure.env
   echo IP_IDM_1=\""${IP_IDM_1}"\" >> /vagrant/secure.env
   echo IP_IDM_2=\""${IP_IDM_2}"\" >> /vagrant/secure.env
