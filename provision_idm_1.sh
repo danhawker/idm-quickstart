@@ -111,11 +111,6 @@ for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
     "${FU_USERNAME}"
   echo "${FU_PASSWORD}\n${FU_PASSWORD}" | ipa passwd "${FU_USERNAME}"
 
-  # pick a random one to disable
-  if [[ $(($RANDOM % 4)) -eq 0 ]]; then
-    ipa user-disable ${FU_USERNAME}
-  fi
-
   # pick a random one to make a admin
   if [[ $(($RANDOM % 4)) -eq 1 ]]; then
     ipa group-add-member admins --users=${FU_USERNAME}
@@ -129,6 +124,11 @@ for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   # pick a random one to give an OTP
   if [[ $(($RANDOM % 4)) -eq 3 ]]; then
     ipa otptoken-add --desc="Soft Token for ${FU_USERNAME}" --owner=${FU_USERNAME} --type=totp --algo=sha512 --digits=6
+  fi
+
+  # pick a random one to disable
+  if [[ $(($RANDOM % 4)) -eq 0 ]]; then
+    ipa user-disable ${FU_USERNAME}
   fi
 done
 IFS=${O_IFS}
