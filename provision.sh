@@ -4,11 +4,15 @@ echo "provision.sh"
 
 NETWORK_DEVICE="enp0s3"
 
-# channel clean up for Red Hat Enterprise Linux
+# clean up for Red Hat Enterprise Linux
 cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&1 && {
   subscription-manager repos --disable='*'
   subscription-manager repos --enable='rhel-7-server-rpms'
   NETWORK_DEVICE="eth0"
+  systemctl disable iptables
+  systemctl disable ip6tables
+  systemctl stop iptables
+  systemctl stop ip6tables
 }
 
 # clean up yum
@@ -19,6 +23,10 @@ yum -y upgrade
 
 # make sure we have the nfs-utils
 yum -y install nfs-utils NetworkManager
+
+# make sure NetworkManager is running
+systemctl enable NetworkManager
+systemctl status NetworkManager || systemctl start NetworkManager
 
 # use a default of example.test if not specified
 DOMAIN=${DOMAIN:-example.test}
