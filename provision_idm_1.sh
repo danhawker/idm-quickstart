@@ -201,11 +201,10 @@ ipa hbacrule-add-user allow_editors --groups=editors
 ipa hbacrule-mod allow_editors --hostcat=all --servicecat=all
 
 # create a new allow ipausers host based access control rule
-ipa hbacrule-add allow_ipausers --desc="Allow ipausers access to ssh on all client systems"
+ipa hbacrule-add allow_ipausers --desc="Allow ipausers access to ssh on client systems"
 ipa hbacrule-add-user allow_ipausers --groups=ipausers
 ipa hbacrule-add-host allow_ipausers --hostgroups=idm-clients
 ipa hbacrule-add-service allow_ipausers --hbacsvcs=sshd
-ipa hbacrule-mod allow_ipausers --hostcat=all
 
 # create our automounts
 ipa automountmap-add default auto.home
