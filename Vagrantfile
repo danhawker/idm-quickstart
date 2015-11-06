@@ -119,25 +119,26 @@ Vagrant.configure(2) do |config|
     client7_1.vm.provision "shell", path: "provision_client7_1.sh"
   end
 
-  config.vm.define "client6_1" do |client6_1|
-    # Every Vagrant development environment requires a box. You can search for
-    # boxes at https://atlas.hashicorp.com/search.
-    config.vm.box = "bento/centos-6.7"
+  # by default, don't create a centos 6 client
+  # config.vm.define "client6_1" do |client6_1|
+  #   # Every Vagrant development environment requires a box. You can search for
+  #   # boxes at https://atlas.hashicorp.com/search.
+  #   config.vm.box = "bento/centos-6.7"
 
-    # The hostname the machine should have. Defaults to nil. If nil, Vagrant
-    # won't manage the hostname. If set to a string, the hostname will be set
-    # on boot.
-    client6_1.vm.hostname = "client6-1.example.test"
+  #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
+  #   # won't manage the hostname. If set to a string, the hostname will be set
+  #   # on boot.
+  #   client6_1.vm.hostname = "client6-1.example.test"
 
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    client6_1.vm.network "private_network", ip: "172.17.0.19", virtualbox__intnet: true
+  #   # Create a private network, which allows host-only access to the machine
+  #   # using a specific IP.
+  #   client6_1.vm.network "private_network", ip: "172.17.0.19", virtualbox__intnet: true
 
-    # Enable provisioning with a shell script. Additional provisioners such as
-    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-    # documentation for more information about their specific syntax and use.
-    client6_1.vm.provision "shell", path: "provision_client6_1.sh"
-  end
+  #   # Enable provisioning with a shell script. Additional provisioners such as
+  #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  #   # documentation for more information about their specific syntax and use.
+  #   client6_1.vm.provision "shell", path: "provision_client6_1.sh"
+  # end
 
   # by default, don't create a replica
   # config.vm.define "idm_2" do |idm_2|
