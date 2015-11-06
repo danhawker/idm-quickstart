@@ -151,7 +151,7 @@ id wondergirl
 # let's get CRAY CRAY and create 50,000 users from our fake users file...
 O_IFS=${IFS}
 IFS=$'\n'
-COUNT=0
+
 for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   unset FU_USERNAME FU_PASSWORD FU_TITLE FU_FIRSTNAME FU_LASTNAME FU_TELEPHONE FU_ADDRESS_STREET FU_ADDRESS_CITY FU_ADDRESS_STATE FU_ADDRESS_ZIPCODE FU_EMPLOYEE_NUMBER
   FAKE_USER_LINE=$(echo ${FAKE_USER_LINE} | sed -e 's/\"//g')
@@ -168,24 +168,82 @@ for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   FU_ADDRESS_STATE=$(echo ${FAKE_USER_LINE} | cut -d , -f 9)
   FU_ADDRESS_ZIPCODE=$(echo ${FAKE_USER_LINE} | cut -d , -f 10)
   FU_EMPLOYEE_NUMBER=$(echo ${FAKE_USER_LINE} | cut -d , -f 11)
-  # Skip the first line
-  if [[ ! $COUNT -eq 0 ]]; then
-    ipa user-add \
-      --title="${FU_TITLE}" \
-      --first="${FU_FIRSTNAME}" \
-      --last="${FU_LASTNAME}" \
-      --employeenumber="${FU_EMPLOYEE_NUMBER}" \
-      --phone="${FU_TELEPHONE}" \
-      --street="${FU_ADDRESS_STREET}" \
-      --city="${FU_ADDRESS_CITY}" \
-      --state="${FU_ADDRESS_STATE}" \
-      --postalcode="${FU_ADDRESS_ZIPCODE}" \
-      "${FU_USERNAME}"
-    echo "${FU_PASSWORD}\n${FU_PASSWORD}" | ipa passwd "${FU_USERNAME}"
+
+  ipa user-add \
+    --title="${FU_TITLE}" \
+    --first="${FU_FIRSTNAME}" \
+    --last="${FU_LASTNAME}" \
+    --employeenumber="${FU_EMPLOYEE_NUMBER}" \
+    --phone="${FU_TELEPHONE}" \
+    --street="${FU_ADDRESS_STREET}" \
+    --city="${FU_ADDRESS_CITY}" \
+    --state="${FU_ADDRESS_STATE}" \
+    --postalcode="${FU_ADDRESS_ZIPCODE}" \
+    "${FU_USERNAME}"
+  echo "${FU_PASSWORD}\n${FU_PASSWORD}" | ipa passwd "${FU_USERNAME}"
+
+  # pick a random one to disable
+  if [[ $(($RANDOM % 4)) -eq 0 ]]; then
+    ipa user-disable ${FU_USERNAME}
   fi
-  COUNT=1
+
+  # pick a random one to make a admin
+  if [[ $(($RANDOM % 4)) -eq 1 ]]; then
+    ipa group-add-member admins --users=${FU_USERNAME}
+  fi
+
+  # pick a random one to make an editor
+  if [[ $(($RANDOM % 4)) -eq 2 ]]; then
+    ipa group-add-member editors --users=${FU_USERNAME}
+  fi
+
+  # pick a random one to give an OTP
+  if [[ $(($RANDOM % 4)) -eq 3 ]]; then
+    ipa otptoken-add --desc="Soft Token for ${FU_USERNAME}" --owner=${FU_USERNAME} --type=totp --algo=sha512 --digits=6
+  fi
 done
 IFS=${O_IFS}
+
+# add a rule that allows admins GOD access
+ipa sudorule-add \
+  --desc="This rule allows admins the ability to run ANY command on ALL hosts as ANY user" \
+  --cmdcat=all \
+  --hostcat=all \
+  --runasusercat=all \
+  --runasgroupcat=all \
+  --order=1 \
+  admins
+ipa sudorule-add-user --groups=admins admins
+
+# Add rules for editors to do service administration
+ipa sudocmdgroup-add --desc="These commands allow a user to control system services." "service administration"
+ipa sudocmd-add --desc="This command represents the chkconfig command to manage services." "/sbin/chkconfig *"
+ipa sudocmd-add --desc="This command represents the service command to control services." "/sbin/service *"
+ipa sudocmd-add --desc="This command represents the systemd command to control services." "/bin/systemctl *"
+ipa sudocmdgroup-add-member --sudocmds="/bin/systemctl *" "service administration"
+ipa sudocmdgroup-add-member --sudocmds="/sbin/chkconfig *" "service administration"
+ipa sudocmdgroup-add-member --sudocmds="/sbin/service *" "service administration"
+ipa sudorule-add \
+  --desc="This rule allows editors the ability to manage services on ALL hosts as the root user" \
+  --hostcat=all \
+  --order=2 \
+  editors
+ipa sudorule-add-runasuser \
+  --users=root \
+  editors
+ipa sudorule-add-allow-command \
+  --sudocmdgroups="service administration" \
+  editors
+
+# Add rules for editors to do log inspection
+ipa sudocmdgroup-add --desc="These commands allow a user to view logs." "log inspection"
+ipa sudocmd-add --desc="This command gives access to the systemd control command to review service and system logs." "/bin/journalctl *"
+ipa sudocmd-add --desc="This command gives access to view the /var/log/audit/audit.log log files." "/bin/cat /var/log/audit/audit.log"
+ipa sudocmd-add --desc="This command gives access to view the /var/log/messages log file." "/bin/cat /var/log/messages"
+ipa sudocmd-add --desc="This command gives access to view the /var/log/secure log file." "/bin/cat /var/log/secure"
+ipa sudorule-add-allow-command \
+  --sudocmdgroups="log inspection" \
+  editors
 
 # disable the allow all host based access control rule
 ipa hbacrule-disable allow_all
