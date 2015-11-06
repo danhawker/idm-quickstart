@@ -63,6 +63,20 @@ ipa config-mod --user-auth-type=password --user-auth-type=otp
 # make ipausers a posix group so accounts just work
 ipa group-mod --posix ipausers
 
+# create some autogroups based on the state a user lives in
+O_IFS=${IFS}
+IFS=$'\n'
+COUNT=0
+for STATE_LINE in $(tail -n 50 /vagrant/states.csv); do
+  G_NAME=$(echo ${STATE_LINE} | cut -d , -f 1)
+  G_DESC=$(echo ${STATE_LINE} | cut -d , -f 2)
+  G_PATTERN=$(echo ${STATE_LINE} | cut -d , -f 3)
+  ipa group-add --desc="People who live in ${G_DESC}" ${G_NAME}
+  ipa automember-add --type=group --desc="Identify users who live in the state of ${G_DESC}" ${G_NAME}
+  ipa automember-add-condition --type=group --key=st --desc="Match users based on the st field" --inclusive-regex="${G_PATTERN}" ${G_NAME}
+done
+IFS=$O_IFS
+
 # add some users
 echo "adding some users, refer to users.txt for information"
 ipa user-add --random --first="Clark" --last="Kent" "superman" > /vagrant/users.txt
