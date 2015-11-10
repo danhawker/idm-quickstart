@@ -2,3 +2,5 @@ secure.env
 .vagrant
 users.txt
 replica-info-*.gpg
+*.pdf
+*.odt
