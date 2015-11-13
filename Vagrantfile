@@ -12,7 +12,11 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "demobuilder/rhel-server-7"
+  #
+  # to use RHEL 7
+  #config.vm.box = "demobuilder/rhel-server-7"
+  # or default to CentOS 7
+  config.vm.box = "bento/centos-7.1"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -123,8 +127,11 @@ Vagrant.configure(2) do |config|
   # config.vm.define "client6_1" do |client6_1|
   #   # Every Vagrant development environment requires a box. You can search for
   #   # boxes at https://atlas.hashicorp.com/search.
+  #   # to use RHEL 7
+  #   #config.vm.box = "demobuilder/rhel-server-6"
+  #   # or default to CentOS 7
   #   config.vm.box = "bento/centos-6.7"
-
+  #
   #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
   #   # won't manage the hostname. If set to a string, the hostname will be set
   #   # on boot.
