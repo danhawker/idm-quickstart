@@ -72,13 +72,13 @@ can speed it up by logging into the VM and playing "smash your face on the keybo
 Once the VMs are up, you are able to login to each machine by running:
 * IDM Master
  * ```vagrant ssh idm_1```
-* IDM Replica
+* IDM Replica (if you uncommented it in the Vagrantfile)
  * ```vagrant ssh idm_2```
 * IDM NFS Server
- * ```vagrant ssh idm_2```
+ * ```vagrant ssh nfs```
 * IDM Client 7.1
  * ```vagrant ssh client7_1```
-* IDM Client 6.1
+* IDM Client 6.1 (if you uncommented it in the Vagrantfile)
  * ```vagrant ssh client6_1```
 
 ### Login to the VMs
