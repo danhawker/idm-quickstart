@@ -36,15 +36,15 @@ environment for
 * [Managing Identity: Users, Hosts, and Groups](sections/02-managing-identity.md)
 * [Joining Clients](sections/03-joining-clients.md)
 * [Managing Policy](sections/04-managing-policy.md)
-* [Delegating IdM Privileges (RBAC)](sections/05-role-based-access)
+* [Delegating IdM Privileges (RBAC)](sections/05-role-based-access.md)
 
 ## Advanced Topics
 * [Adding additional IdM Servers (replicas, topology)](sections/06-install-replica.md)
 * [Backup and Restore](sections/07-backup-and-restore.md)
-* [Active Directory Integration (Trust, External Groups, Views)](08-active-directory-integration.md)
-* [Advanced User Features (SSH, OTP, Views)](09-advanced-user-features.md)
-* [Advanced Host Features (SSH, SSL)](10-advanced-host-features.md)
-* [Managing Network Services (Automount, DNS)](11-managing-network-services.md)
+* [Active Directory Integration (Trust, External Groups, Views)](sections/08-active-directory-integration.md)
+* [Advanced User Features (SSH, OTP, Views)](sections/09-advanced-user-features.md)
+* [Advanced Host Features (SSH, SSL)](sections/10-advanced-host-features.md)
+* [Managing Network Services (Automount, DNS)](sections/11-managing-network-services.md)
 
 ## Demonstration
 
@@ -53,12 +53,12 @@ For your convenience, there is a simple Vagrantfile that will stand up the
 quick start environment using CentOS 7 and FreeIPA.  It will be stood up with
 a decent number of users and groups, mostly super heroes and super villians.
 The [Vagrant Demo Script](vagrant-demo/README.md) will walk through several
-real use cases encountered in the dual Marvel and DC comic universes.
+real use cases with generated data.
 
 ### Notes
 * !! Do not use this for production workloads !!
 * IDM Passwords will be randomly generated and stored in ```secure.env``` alongside the ```Vagrantfile```
-* Users and their random passwords generated will stored in ```users.txt``` alongside the ```Vagrantfile```
+* Users are generated using data stored in ```fake-users.csv``` alongside the ```Vagrantfile```
 
 ### Start the VMs
 To get the VMs up and running, you need Vagrant, a hypervisor and then run:
@@ -74,10 +74,11 @@ Once the VMs are up, you are able to login to each machine by running:
  * ```vagrant ssh idm_1```
 * IDM Replica
  * ```vagrant ssh idm_2```
-* IDM Client
+* IDM NFS Server
+ * ```vagrant ssh idm_2```
+* IDM Client 7.1
  * ```vagrant ssh client7_1```
-* IDM Client
+* IDM Client 6.1
  * ```vagrant ssh client6_1```
-
 
 ### Login to the VMs
