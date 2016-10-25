@@ -6,3 +6,4 @@ replica-info-*.gpg
 *.odt
 *.odp
 *.html
+/idm-quickstart.sublime-workspace
