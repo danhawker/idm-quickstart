@@ -18,8 +18,9 @@ not configured.
 
 * idm-1.example.test - RHEL 7
 * idm-2.example.test - RHEL 7
+* nfs.example.test - RHEL 7
 * client7-1.example.test - RHEL 7
-* client6-1.example.test - RHEL 7
+* client6-1.example.test - RHEL 6
 
 For all of our systems, let's make sure they are fully updated:
 ```
@@ -34,7 +35,7 @@ We need to install the IDM software on the following systems:
 
 Install the necessary packages:
 ```
-yum -y install ipa-server bind bind-dyndb-ldap
+yum -y install ipa-server bind bind-dyndb-ldap ipa-server-dns
 ```
 
 Generate (and properly record) some passwords:
