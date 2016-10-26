@@ -1,10 +1,10 @@
 #!/bin/bash
 
-type -a markdown && MD_CONVERTER=markdown
+type -a markdown > /dev/null 2>&1 && MD_CONVERTER=markdown
 
-type -a flavor && MD_CONVERTER=flavor
+type -a flavor > /dev/null 2>&1 && MD_CONVERTER=flavor
 
-if [ -z "$MD_CONVERTER" ];
+if [ -z "$MD_CONVERTER" ]; then
   echo "No markdown converter found!  You need markdown or flavor installed!"
   exit -1
 fi
