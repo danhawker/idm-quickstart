@@ -97,6 +97,23 @@ Vagrant.configure(2) do |config|
     idm_1.vm.network "forwarded_port", guest: 443, host: 8443
   end
 
+  # by default, don't create a replica
+  # config.vm.define "idm_2" do |idm_2|
+  #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
+  #   # won't manage the hostname. If set to a string, the hostname will be set
+  #   # on boot.
+  #   idm_2.vm.hostname = "idm-2.example.test"
+
+  #   # Create a private network, which allows host-only access to the machine
+  #   # using a specific IP.
+  #   idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
+
+  #   # Enable provisioning with a shell script. Additional provisioners such as
+  #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  #   # documentation for more information about their specific syntax and use.
+  #   idm_2.vm.provision "shell", path: "provision_idm_2.sh"
+  # end
+
   config.vm.define "nfs" do |nfs|
     # The hostname the machine should have. Defaults to nil. If nil, Vagrant
     # won't manage the hostname. If set to a string, the hostname will be set
@@ -133,10 +150,10 @@ Vagrant.configure(2) do |config|
   # config.vm.define "client6_1" do |client6_1|
   #   # Every Vagrant development environment requires a box. You can search for
   #   # boxes at https://atlas.hashicorp.com/search.
-  #   # to use RHEL 7
+  #   # to use RHEL 6
   #   #config.vm.box = "demobuilder/rhel-server-6"
-  #   # or default to CentOS 7
-  #   config.vm.box = "bento/centos-6.7"
+  #   # or default to CentOS 6
+  #   config.vm.box = "bento/centos-6.8"
   #
   #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
   #   # won't manage the hostname. If set to a string, the hostname will be set
@@ -151,23 +168,6 @@ Vagrant.configure(2) do |config|
   #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   #   # documentation for more information about their specific syntax and use.
   #   client6_1.vm.provision "shell", path: "provision_client6_1.sh"
-  # end
-
-  # by default, don't create a replica
-  # config.vm.define "idm_2" do |idm_2|
-  #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
-  #   # won't manage the hostname. If set to a string, the hostname will be set
-  #   # on boot.
-  #   idm_2.vm.hostname = "idm-2.example.test"
-
-  #   # Create a private network, which allows host-only access to the machine
-  #   # using a specific IP.
-  #   idm_2.vm.network "private_network", ip: "172.17.0.3", virtualbox__intnet: true
-
-  #   # Enable provisioning with a shell script. Additional provisioners such as
-  #   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  #   # documentation for more information about their specific syntax and use.
-  #   idm_2.vm.provision "shell", path: "provision_idm_2.sh"
   # end
 
 end
