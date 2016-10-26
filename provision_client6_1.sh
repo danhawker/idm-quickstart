@@ -67,11 +67,4 @@ for i in _ldap._tcp _kerberos._tcp _kerberos._udp _kerberos-master._tcp _kerbero
   dig ${i}.${DOMAIN} srv +nocmd +noquestion +nocomments +nostats +noaa +noadditional +noauthority
 done | egrep -v "^;" | egrep _
 
-id superman
-id batman
-id twoface
-id cyclops
-id flash
-id riddler
-
 exit 0
