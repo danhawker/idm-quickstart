@@ -19,7 +19,7 @@ cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&
 yum -y clean all
 
 # Do an upgrade of packages
-yum -y upgrade
+yum -y upgrade --exclude=kernel*
 
 # make sure we have the nfs-utils
 yum -y install nfs-utils NetworkManager
