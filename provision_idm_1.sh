@@ -4,7 +4,7 @@ echo "provision_idm_1.sh"
 source /vagrant/secure.env
 
 # install ipa server and dns server
-yum -y install ipa-server bind bind-dyndb-ldap
+yum -y install ipa-server bind bind-dyndb-ldap ipa-server-dns
 
 unset DNS_FORWARDER IPA_FORWARDERS
 for DNS_FORWARDER in ${DNS_FORWARDERS}; do
@@ -182,6 +182,11 @@ ipa hbacrule-add allow_admins --desc="Allow admins access to all services on all
 ipa hbacrule-add-user allow_admins --groups=admins
 ipa hbacrule-mod allow_admins --hostcat=all --servicecat=all
 
+# create a new allow trust admins host based access control rule
+ipa hbacrule-add allow_trust_admins --desc="Allow trust admins access to all services on all systems"
+ipa hbacrule-add-user allow_trust_admins --groups="trust admins"
+ipa hbacrule-mod allow_trust_admins --hostcat=all --servicecat=all
+
 # create a new allow editors host based access control rule
 ipa hbacrule-add allow_editors --desc="Allow editors access to all services on all systems"
 ipa hbacrule-add-user allow_editors --groups=editors
@@ -197,6 +202,34 @@ ipa hbacrule-add-service allow_ipausers --hbacsvcs=sshd
 ipa automountmap-add default auto.home
 ipa automountkey-add default auto.home --key="*" --info="-sec=krb5p,rw,soft nfs.${DOMAIN}:/export/home/&"
 ipa automountkey-add default auto.master --key="/export/home" --info="auto.home"
+
+# create some selinux mappings for admins
+ipa selinuxusermap-add "admins" --hostcat=all --desc "This maps administrators to the unconfined_u context" --selinuxuser='unconfined_u:s0-s0:c0.c1023'
+ipa selinuxusermap-add-user "admins" --groups="admins"
+
+# create some selinux mappings for trust admins
+ipa selinuxusermap-add "trust admins" --hostcat=all --desc "This maps trust admins to the staff_u context" --selinuxuser='staff_u:s0-s0:c0.c1023'
+ipa selinuxusermap-add-user "trust admins" --groups="trust admins"
+
+# create some selinux mappings for editors
+ipa selinuxusermap-add "editors" --hostcat=all --desc "This maps editors to the user_u context" --selinuxuser='user_u:s0'
+ipa selinuxusermap-add-user "editors" --groups="editors"
+
+# create some selinux mappings for ipausers
+ipa selinuxusermap-add "ipausers" --hostcat=all --desc "This maps ipausers to the guest_u context" --selinuxuser='guest_u:s0'
+ipa selinuxusermap-add-user "ipausers" --groups="ipausers"
+
+# create some interesting password policies for admins
+ipa pwpolicy-add "admins" --priority=10 --maxlife=14 --minlife=8 --history=12 --minclasses=3 --minlength=16 --maxfail=2 --failinterval=180 --lockouttime=600
+
+# create some interesting password policies for trust admins
+ipa pwpolicy-add "trust admins" --priority=20 --maxlife=28 --minlife=4 --history=12 --minclasses=2 --minlength=12 --maxfail=3 --failinterval=60 --lockouttime=300
+
+# create some interesting password policies for editors
+ipa pwpolicy-add "editors" --priority=30 --maxlife=42 --minlife=4 --history=12 --minclasses=2 --minlength=12 --maxfail=3 --failinterval=60 --lockouttime=300
+
+# create some interesting password policies for ipausers
+ipa pwpolicy-add "ipausers" --priority=40 --maxlife=91 --minlife=4 --history=12 --minclasses=3 --minlength=8 --maxfail=3 --failinterval=60 --lockouttime=300
 
 # configure our automounts
 ipa-client-automount --unattended

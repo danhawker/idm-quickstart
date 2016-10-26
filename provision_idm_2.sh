@@ -4,7 +4,7 @@ echo "provision_idm_2.sh"
 source /vagrant/secure.env
 
 # install ipa server and dns server
-yum -y install ipa-server bind bind-dyndb-ldap
+yum -y install ipa-server bind bind-dyndb-ldap ipa-server-dns
 
 # copy and then remove the replica information
 cp /vagrant/replica-info-idm-2.${DOMAIN}.gpg /var/lib/ipa
