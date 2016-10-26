@@ -1,6 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# this is sort of required on macs to fix a silly vagrant bug
+# uncomment it out if you have issues and want to try a workaround
+require_relative 'network_interfaces'
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -16,7 +20,7 @@ Vagrant.configure(2) do |config|
   # to use RHEL 7
   #config.vm.box = "demobuilder/rhel-server-7"
   # or default to CentOS 7
-  config.vm.box = "bento/centos-7.1"
+  config.vm.box = "bento/centos-7.2"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -69,6 +73,8 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", path: "provision.sh"
+
+  config.vm.provision :reload
 
   config.vm.define "idm_1" do |idm_1|
     # The hostname the machine should have. Defaults to nil. If nil, Vagrant
