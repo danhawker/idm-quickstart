@@ -76,9 +76,9 @@ Once the VMs are up, you are able to login to each machine by running:
  * ```vagrant ssh idm_2```
 * IDM NFS Server
  * ```vagrant ssh nfs```
-* IDM Client 7.1
+* IDM Client 7
  * ```vagrant ssh client7_1```
-* IDM Client 6.1 (if you uncommented it in the Vagrantfile)
+* IDM Client 6 (if you uncommented it in the Vagrantfile)
  * ```vagrant ssh client6_1```
 
 ### Login to the VMs
