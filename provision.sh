@@ -2,13 +2,10 @@
 
 echo "provision.sh"
 
-NETWORK_DEVICE="eth0"
-
 # clean up for Red Hat Enterprise Linux
 cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&1 && {
   subscription-manager repos --disable='*'
   subscription-manager repos --enable='rhel-7-server-rpms'
-  NETWORK_DEVICE="eth0"
   systemctl disable iptables
   systemctl disable ip6tables
   systemctl stop iptables
