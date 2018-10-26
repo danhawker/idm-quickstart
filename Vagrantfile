@@ -117,7 +117,7 @@ Vagrant.configure(2) do |config|
     # documentation for more information about their specific syntax and use.
     nfs.vm.provision "shell", path: "provision_nfs.sh"
 
-    idm_1.vm.provider "virtualbox" do |v|
+    nfs.vm.provider "virtualbox" do |v|
       v.memory = 2048
       v.cpus = 2
     end
@@ -139,7 +139,7 @@ Vagrant.configure(2) do |config|
     # documentation for more information about their specific syntax and use.
     client7_1.vm.provision "shell", path: "provision_client7_1.sh"
 
-    idm_1.vm.provider "virtualbox" do |v|
+    client7_1.vm.provider "virtualbox" do |v|
       v.memory = 1024
       v.cpus = 1
     end
