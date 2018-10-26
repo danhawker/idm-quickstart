@@ -170,6 +170,11 @@ ipa sudocmd-add --desc="This command gives access to the systemd control command
 ipa sudocmd-add --desc="This command gives access to view the /var/log/audit/audit.log log files." "/bin/cat /var/log/audit/audit.log"
 ipa sudocmd-add --desc="This command gives access to view the /var/log/messages log file." "/bin/cat /var/log/messages"
 ipa sudocmd-add --desc="This command gives access to view the /var/log/secure log file." "/bin/cat /var/log/secure"
+ipa sudocmdgroup-add-member --sudocmds="/bin/journalctl *" "log inspection"
+ipa sudocmdgroup-add-member --sudocmds="/bin/cat /var/log/audit/audit.log" "log inspection"
+ipa sudocmdgroup-add-member --sudocmds="/bin/cat /var/log/messages" "log inspection"
+ipa sudocmdgroup-add-member --sudocmds="/bin/cat /var/log/secure" "log inspection"
+
 ipa sudorule-add-allow-command \
   --sudocmdgroups="log inspection" \
   editors
