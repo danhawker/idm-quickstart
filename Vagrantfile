@@ -116,6 +116,12 @@ Vagrant.configure(2) do |config|
     # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
     nfs.vm.provision "shell", path: "provision_nfs.sh"
+
+    idm_1.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 2
+    end
+
   end
 
   config.vm.define "client7_1" do |client7_1|
@@ -132,6 +138,12 @@ Vagrant.configure(2) do |config|
     # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
     client7_1.vm.provision "shell", path: "provision_client7_1.sh"
+
+    idm_1.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+    end
+
   end
 
   # by default, don't create a centos 6 client
