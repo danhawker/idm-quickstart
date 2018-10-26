@@ -153,7 +153,7 @@ Vagrant.configure(2) do |config|
   #   # to use RHEL 6
   #   #config.vm.box = "demobuilder/rhel-server-6"
   #   # or default to CentOS 6
-  #   config.vm.box = "bento/centos-6.8"
+  #   config.vm.box = "centos/centos6"
   #
   #   # The hostname the machine should have. Defaults to nil. If nil, Vagrant
   #   # won't manage the hostname. If set to a string, the hostname will be set
