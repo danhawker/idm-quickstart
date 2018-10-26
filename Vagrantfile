@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
   # to use RHEL 7
   #config.vm.box = "demobuilder/rhel-server-7"
   # or default to CentOS 7
-  config.vm.box = "bento/centos-7.2"
+  config.vm.box = "centos/7"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
