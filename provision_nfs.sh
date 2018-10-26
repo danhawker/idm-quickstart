@@ -6,14 +6,13 @@ source /vagrant/secure.env
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
 echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
-echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
 # setup our network so it works over reboots
-nmcli conn modify ${NETWORK_DEVICE} ipv4.ignore-auto-dns yes
-nmcli conn modify ${NETWORK_DEVICE} ipv4.dns "${IP_IDM_1} ${IP_IDM_2}"
-nmcli conn modify ${NETWORK_DEVICE} ipv4.dns-search "${DOMAIN}"
-nmcli conn show ${NETWORK_DEVICE}
+nmcli conn modify "${NETWORK_DEVICE}" ipv4.ignore-auto-dns yes
+nmcli conn modify "${NETWORK_DEVICE}" ipv4.dns "${IP_IDM_1}"
+nmcli conn modify "${NETWORK_DEVICE}" ipv4.dns-search "${DOMAIN}"
+nmcli conn show "${NETWORK_DEVICE}"
 
 # clean up our /etc/hosts
 echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts

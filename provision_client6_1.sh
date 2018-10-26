@@ -6,14 +6,12 @@ source /vagrant/secure.env
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
 echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
-echo nameserver ${IP_IDM_2} >> /etc/resolv.conf
 echo options timeout:1 attempts:2 >> /etc/resolv.conf
 
 # setup our network so it works over reboots
 echo '## use the following nameservers in /etc/resolv.conf ##' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 echo 'PEERDNS=no' >> /etc/sysconfig/network-scripts/ifcfg-eth0
 echo "DNS1=${IP_IDM_1}" >> /etc/sysconfig/network-scripts/ifcfg-eth0
-echo "DNS2=${IP_IDM_2}" >> /etc/sysconfig/network-scripts/ifcfg-eth0
 echo "DOMAIN=\"${DOMAIN}\"" >> /etc/sysconfig/network-scripts/ifcfg-eth0
 
 # clean up our /etc/hosts
