@@ -70,7 +70,6 @@ if [ ! -f /vagrant/secure.env ]; then
   echo DNS_REVERSE_ZONE=\""${DNS_REVERSE_ZONE}"\" >> /vagrant/secure.env
   echo DNS_FORWARDERS=\""${DNS_FORWARDERS}"\" >> /vagrant/secure.env
   echo DM_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
-  echo MASTER_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo ADMIN_PASSWORD=\""$(openssl rand -base64 16 | tr -dc [:alnum:])"\" >> /vagrant/secure.env
   echo MAX_FAKE_USERS=${MAX_FAKE_USERS} >> /vagrant/secure.env
   echo "Passwords are stored in secure.inc"

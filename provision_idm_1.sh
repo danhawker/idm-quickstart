@@ -17,7 +17,6 @@ ipa-server-install \
   --realm=${REALM} \
   --domain=${DOMAIN} \
   --ds-password="${DM_PASSWORD}" \
-  --master-password="${MASTER_PASSWORD}" \
   --admin-password="${ADMIN_PASSWORD}" \
   --mkhomedir \
   --setup-dns \
