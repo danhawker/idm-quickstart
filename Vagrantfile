@@ -95,6 +95,11 @@ Vagrant.configure(2) do |config|
     # all data forwarded to a port on the guest machine, over either TCP or UDP.
     idm_1.vm.network "forwarded_port", guest: 80, host: 8080
     idm_1.vm.network "forwarded_port", guest: 443, host: 8443
+
+    idm_1.vm.provider "virtualbox" do |v|
+      v.memory = 3184
+      v.cpus = 2
+    end
   end
 
   # by default, don't create a replica
