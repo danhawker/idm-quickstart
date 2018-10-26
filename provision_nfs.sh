@@ -49,6 +49,12 @@ ipa-getkeytab -s idm-1.${DOMAIN} \
 # create an nfs mount for home directories
 echo "/export *(rw,subtree_check,fsid=0,sec=krb5:krb5i:krb5p)" >> /etc/exports
 
+# enable, start and configure firewalld
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --add-service=nfs --add-service=nfs3 --add-service=rpc-bind --permanent
+firewall-cmd --reload
+
 # enable and start nfs server
 systemctl enable nfs-server.service
 systemctl start nfs-server.service

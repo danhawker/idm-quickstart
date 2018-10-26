@@ -6,6 +6,19 @@ source /vagrant/secure.env
 # install ipa server and dns server
 yum -y install ipa-server bind bind-dyndb-ldap ipa-server-dns
 
+# enable, start and configure firewalld
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --add-service=kerberos \
+  --add-service=freeipa-ldap \
+  --add-service=freeipa-ldaps \
+  --add-service=http \
+  --add-service=https \
+  --add-service=dns \
+  --add-service=ntp \
+  --permanent
+firewall-cmd --reload
+
 unset DNS_FORWARDER IPA_FORWARDERS
 for DNS_FORWARDER in ${DNS_FORWARDERS}; do
   IPA_FORWARDERS="${IPA_FORWARDERS} --forwarder=${DNS_FORWARDER}"
