@@ -2,7 +2,7 @@
 
 echo "provision.sh"
 
-NETWORK_DEVICE="enp0s3"
+NETWORK_DEVICE="eth0"
 
 # clean up for Red Hat Enterprise Linux
 cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&1 && {
