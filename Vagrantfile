@@ -3,7 +3,7 @@
 
 # this is sort of required on macs to fix a silly vagrant bug
 # uncomment it out if you have issues and want to try a workaround
-require_relative 'network_interfaces'
+#require_relative 'network_interfaces'
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
