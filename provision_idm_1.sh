@@ -126,7 +126,7 @@ for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   echo "${FU_PASSWORD}\n${FU_PASSWORD}" | ipa passwd "${FU_USERNAME}"
 
   # pick a random one to make a admin
-  if [[ $(($RANDOM % 4)) -eq 1 ]]; then
+  if [[ $(($RANDOM % 6)) -eq 1 ]]; then
     ipa group-add-member admins --users=${FU_USERNAME}
   fi
 
@@ -141,7 +141,7 @@ for FAKE_USER_LINE in $(tail -n ${MAX_FAKE_USERS} /vagrant/fake-users.csv); do
   fi
 
   # pick a random one to disable
-  if [[ $(($RANDOM % 4)) -eq 0 ]]; then
+  if [[ $(($RANDOM % 10)) -eq 0 ]]; then
     ipa user-disable ${FU_USERNAME}
   fi
 done
