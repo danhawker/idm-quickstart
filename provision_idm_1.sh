@@ -3,6 +3,8 @@
 echo "provision_idm_1.sh"
 source /vagrant/secure.env
 
+date +%s > /tmp/provision_idm_1.timestamp
+
 # install ipa server and dns server
 yum -y install ipa-server bind bind-dyndb-ldap ipa-server-dns
 

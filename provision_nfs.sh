@@ -3,6 +3,8 @@
 echo "provision_nfs.sh"
 source /vagrant/secure.env
 
+date +%s > /tmp/provision_nfs.timestamp
+
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
 echo nameserver ${IP_IDM_1} >> /etc/resolv.conf

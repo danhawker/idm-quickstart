@@ -2,6 +2,11 @@
 
 echo "provision.sh"
 
+# make sure we always include our secure environment variables for ease of use
+cat /vagrant/secure.env
+
+date +%s > /tmp/provision.timestamp
+
 # clean up for Red Hat Enterprise Linux
 cat /etc/redhat-release | grep 'Red Hat Enterprise Linux Server' > /dev/null 2>&1 && {
   subscription-manager repos --disable='*'

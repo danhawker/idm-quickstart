@@ -3,6 +3,8 @@
 echo "provision_client7_1.sh"
 source /vagrant/secure.env
 
+date +%s > /tmp/provision_client7_1.timestamp
+
 # Use our new IPA based dns server -- will prob be reset at reboot
 echo search ${DOMAIN} > /etc/resolv.conf
 echo nameserver ${IP_IDM_1} >> /etc/resolv.conf
